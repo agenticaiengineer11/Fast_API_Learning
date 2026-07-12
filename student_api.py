@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 from typing import Optional
+
 
 app = FastAPI()
 
@@ -11,7 +12,11 @@ students = [
 @app.get("/")
 def home():
     return {"message": "Welcome to Student API"}
-
+@app.get("/students")
+def get_students(age:int = Query(ge= 18,le=60) ):
+    return{
+        "age":age
+    }
 @app.get("/students/{student_id}")
 def get_student(student_id: int):
     for student in students:

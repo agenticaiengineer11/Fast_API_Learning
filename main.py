@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 
 # Create the FastAPI application
 app = FastAPI()
@@ -18,4 +18,20 @@ def contact():
     return {
         "email": "noman@example.com",   # Replace with your real email if you want
         "country": "Pakistan"
+    }
+
+@app.get("/laptops")
+def get_laptops(brand:str = Query(min_length=2,max_length=15)):
+    return{
+        "brand": brand
+    }
+
+@app.get("/employees/search")
+def search_employees(
+    name: str = Query(min_length=3, max_length=30),
+    salary: int = Query(gt=20000, le=500000)
+):
+    return {
+        "name": name,
+        "salary": salary
     }

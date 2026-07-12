@@ -1,5 +1,10 @@
-from fastapi import FastAPI
-app = FastAPI()
+from fastapi import FastAPI,Query
+from typing import Annotated
+app = FastAPI(
+    title="Employee Management System",
+    description="Professional CRUD API",
+    version="1.0.0"
+)
 
 employees = [
     {"id":1 , "name":"John","salary":50000},
@@ -8,7 +13,15 @@ employees = [
 @app.get("/employees")
 def get_employee():
     return employees
-
+@app.get("/employees/search")
+def search_employees(
+    name: Annotated[str , Query(min_length=3, max_length=30)],
+    salary:Annotated[ int , Query(gt=20000, le=500000)]
+):
+    return {
+        "name": name,
+        "salary": salary
+    }
 @app.get("/employees/{employee_id}")
 def get_employee(employee_id:int):
     for employee in employees:

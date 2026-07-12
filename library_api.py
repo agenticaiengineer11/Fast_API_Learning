@@ -1,5 +1,5 @@
 print("==========Library_API=========")
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 books = [
     {"id":2,"title":"python","chapter_id": 134},
     {"id":3,"title":"c++","chapter_id": 123}
@@ -10,7 +10,9 @@ def get():
     return books
 
 @app.get("/books/search")
-def search_book(title:str,book_id:int):
+def search_book(book_id:int, 
+                title:str=Query(min_length=3,max_length=20,description="Enter the book title ",example="Python")
+                ):
     for book in books:
         if book["title"] == title and book["id"] == book_id:
             return book
@@ -37,3 +39,4 @@ def get_book_chapters(book_id:int,chapter_id:int):
     return{
         "message":"Book not found"
     }
+
