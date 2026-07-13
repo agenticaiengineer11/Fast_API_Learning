@@ -25,13 +25,3 @@ def get_laptops(brand:str = Query(min_length=2,max_length=15)):
     return{
         "brand": brand
     }
-
-@app.get("/employees/search")
-def search_employees(
-    name: str = Query(min_length=3, max_length=30),
-    salary: int = Query(gt=20000, le=500000)
-):
-    return {
-        "name": name,
-        "salary": salary
-    }
