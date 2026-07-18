@@ -56,11 +56,7 @@ def create_employee(employee: EmployeeCreate):
                 status_code=400,
                 detail="Employee ID already exists"
             )
-    employees.append(employee.model_dump())
-    raise HTTPException(
-        status_code= 201,
-        detail="Successfully posted"
-    )
+        employees.append(employee.model_dump())
     return employee
 
 @app.patch("/employees/{employee_id}",response_model=EmployeeResponse)
@@ -91,15 +87,13 @@ def Update_employee(employee_id:int , employee:EmployeeCreate):
     return {
         "message": "Employee not found"
     }
-@app.delete("/employees/{employee_id}",response_model=EmployeeResponse)
+@app.delete("/employees/{employee_id}",response_model=EmployeeResponse,status_code=204)
 def delete_employee(employee_id:int):
     for employee in employees:
         if employee["id"] == employee_id:
             employees.remove(employee)
-            raise HTTPException(
-        status_code= 204,
-        detail="Successful delete(no response body)"
-    )
+
+            return employee
     raise HTTPException(
         status_code=404,
         detail="Employee not found"
