@@ -23,12 +23,12 @@ employees = [
 ]
 class EmployeeCreate(BaseModel):
     id: int = Field(gt=0)
-    name: str = Field(min_length=3,max_length=7)
+    name: str = Field(min_length=3,max_length=20)
     department: str = Field(min_length=5,max_length=20)
     salary: int = Field(gt=25000,le=500000)
 class EmployeeUpdate(BaseModel):
-    name: Optional[str] = Field(default=None,min_length=3,max_length=5)
-    department: Optional[str] = Field(default=None,min_length=3,max_length=5)
+    name: Optional[str] = Field(default=None,min_length=3,max_length=50)
+    department: Optional[str] = Field(default=None,min_length=3,max_length=50)
     salary: Optional[int] = Field(default=None, ge=25000, le=500000)
 class EmployeeResponse(BaseModel):
     id:int
