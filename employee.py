@@ -96,9 +96,12 @@ def delete_employee(employee_id:int):
     for employee in employees:
         if employee["id"] == employee_id:
             employees.remove(employee)
-
-            return employee
-    raise HTTPException(
+            raise HTTPException(
         status_code= 204,
         detail="Successful delete(no response body)"
     )
+    raise HTTPException(
+        status_code=404,
+        detail="Employee not found"
+    )
+    
