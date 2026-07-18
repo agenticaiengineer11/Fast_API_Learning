@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+print("=========Day 5 and Day 6 update in existing code of HTTP Exception========")
+from fastapi import FastAPI,HTTPException
 from pydantic import Field , BaseModel
 from typing import Optional
 app = FastAPI(
@@ -42,13 +43,24 @@ def get_all(employee_id):
     for employee in employees:
         if employee["id"] == employee_id:
             return employee
-        else:
-            return {
-                "message": "employee not found"
-            }
+ 
+    raise HTTPException(
+                status_code=404,
+                detail="Employee not found"
+            )
 @app.post("/employees",response_model=EmployeeResponse)
 def create_employee(employee: EmployeeCreate):
+    for emp in employees:
+        if emp["id"]== employee.id:
+            raise HTTPException(
+                status_code=400,
+                detail="Employee ID already exists"
+            )
     employees.append(employee.model_dump())
+    raise HTTPException(
+        status_code= 201,
+        detail="Successfully posted"
+    )
     return employee
 
 @app.patch("/employees/{employee_id}",response_model=EmployeeResponse)
@@ -63,9 +75,10 @@ def Patch_employee(employee_id:int,employee:EmployeeUpdate):
                 old_employee["salary"] = employee.salary
             
             return old_employee
-    return{
-        "message": "Employee not found"
-    }
+    raise HTTPException(
+        status_code=404,
+        detail="Employee not found"
+    )
 @app.put("/employees/{employee_id}",response_model=EmployeeResponse)
 def Update_employee(employee_id:int , employee:EmployeeCreate):
     for index, old_employee in enumerate(employees):
@@ -85,6 +98,7 @@ def delete_employee(employee_id:int):
             employees.remove(employee)
 
             return employee
-    return {
-        "message": "employee not found"
-    }
+    raise HTTPException(
+        status_code= 204,
+        detail="Successful delete(no response body)"
+    )
