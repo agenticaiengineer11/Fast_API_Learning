@@ -37,6 +37,15 @@ class EmployeeResponse(BaseModel):
 @app.get("/employees",response_model  = list[EmployeeResponse])
 def get_employees():
     return employees
+@app.get("/employees/{employee_id}",response_model=EmployeeResponse)
+def get_all(employee_id):
+    for employee in employees:
+        if employee["id"] == employee_id:
+            return employee
+        else:
+            return {
+                "message": "employee not found"
+            }
 @app.post("/employees",response_model=EmployeeResponse)
 def create_employee(employee: EmployeeCreate):
     employees.append(employee.model_dump())
