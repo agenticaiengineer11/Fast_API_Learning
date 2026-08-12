@@ -24,3 +24,28 @@ def get_employees(params = Depends(common_parameters)):
     }
 
 
+print("==================Current user dependency================")
+from fastapi import FastAPI, Depends
+
+app = FastAPI()
+
+def get_current_user():
+    user={
+        "id": 1,
+        "name":"Muku",
+        "role":"admin"
+    }
+    return user
+@app.get("/profile")
+def get_profile(user= Depends(get_current_user)):
+    return{
+        "message":"user retrived",
+        "user": user
+    }
+
+@app.get("/employees")
+def get_user(user=Depends(get_current_user)):
+    return{
+        "message":"Employee Data",
+        "requested by": user
+    }
