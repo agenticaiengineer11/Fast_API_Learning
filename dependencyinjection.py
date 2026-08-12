@@ -25,7 +25,7 @@ def get_employees(params = Depends(common_parameters)):
 
 
 print("==================Current user dependency================")
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends,Query
 
 app = FastAPI()
 
@@ -48,4 +48,26 @@ def get_user(user=Depends(get_current_user)):
     return{
         "message":"Employee Data",
         "requested by": user
+    }
+
+def get_pagination(
+        page:int = Query(1,ge=1),
+        limit:int = Query(10,ge=1,le=100)
+):
+    return {
+        "page":page,
+        "limit":limit
+    }
+@app.get("/products")
+def get_products(params=Depends(get_pagination)):
+    return{
+        "Products":["Jewelery","Neckles"],
+        "pagination": params
+
+    }
+@app.get("/orders")
+def get_orders(params=Depends(get_pagination)):
+    return {
+        "orders": ["Order 1", "Order 2"],
+        "pagination": params
     }
