@@ -1,27 +1,30 @@
-print("======================Request Execution Time Middleware====================")
-
-from fastapi import FastAPI,Request
-
-import time
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
-@app.middleware("http")
-async def my_middleware(request:Request,call_next):
-    print("Request Recieved,",request)
 
-    start_time = time.perf_counter()
+@app.middleware("http")
+async def admin_check(request: Request, call_next):
+
+    if request.url.path.startswith("/admin"):
+
+        token = request.headers.get("X-Admin-Token")
+
+        if token != "secret123":
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "detail": "Admin access denied"
+                }
+            )
 
     response = await call_next(request)
-    response.headers["X-App-Version"] = "2.0"
-    process_time = time.perf_counter() - start_time
-
-    print(f"Response tooks {process_time:.4f} seconds")
 
     return response
 
-@app.get("/students")
-def get_student():
-    return{
-        "students":["Noman","Ali"] 
+@app.get("/admin/dashboard")
+def admin_dashboard():
+    return {
+        "message": "Welcome Admin"
     }
