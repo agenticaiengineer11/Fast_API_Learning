@@ -19,7 +19,18 @@ async def http_exception_handler(
             "status_code": exc.status_code
         }
     )
-
+@app.exception_handler(Exception)
+async def general_exception_handler(
+    request: Request,
+    exc: Exception
+):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "success": False,
+            "message": "Internal server error"
+        }
+    )
 
 @app.get("/students/{student_id}")
 def get_student(student_id: int):
